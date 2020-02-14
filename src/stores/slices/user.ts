@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 import { AppThunk } from 'stores';
 
 const initialState = {
@@ -20,7 +20,7 @@ const slice = createSlice({
 
 export default slice;
 
-export const setRandomName = (): AppThunk => async dispatch => {
+export const setRandomName = (): AppThunk<boolean> => async dispatch => {
   try {
     const response = await fetch('https://uinames.com/api/?region=japan');
     const json: {
@@ -31,7 +31,9 @@ export const setRandomName = (): AppThunk => async dispatch => {
     } = await response.json();
 
     dispatch(slice.actions.setName(`${json.name}${json.surname}`));
+
+    return true;
   } catch {
-    return;
+    return false;
   }
 };
